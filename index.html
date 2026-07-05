@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Papa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Cormorant+Garamond:ital@0;1&family=Taviraj:wght@300;400;500;600&family=Mali:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f4e8d0;
+    --cream-deep:#ecdcb8;
+    --paper:#f7ecd6;
+    --paper-shadow:#d8c093;
+    --ink:#4a2f1c;
+    --ink-soft:#6b4423;
+    --brown-deep:#3e2712;
+    --gold:#b8935a;
+    --wax:#8a3324;
+    --wax-dark:#5c2016;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:var(--cream);
+    font-family:'Mali', sans-serif;
+    overflow-x:hidden;
+  }
+
+  body{
+    background-image:
+      radial-gradient(ellipse at top left, rgba(184,147,90,0.15), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(139,51,36,0.08), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(139,109,63,0.035) 0px, rgba(139,109,63,0.035) 1px, transparent 1px, transparent 3px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:24px;
+    position:relative;
+  }
+
+  .stage{
+    width:100%;
+    max-width:520px;
+    position:relative;
+    perspective:1600px;
+  }
+
+  /* ---------- ENVELOPE ---------- */
+  .envelope-wrap{
+    position:relative;
+    width:100%;
+    aspect-ratio:3/2;
+    cursor:pointer;
+    user-select:none;
+    transition:opacity .6s ease .2s, transform .6s ease .2s;
+  }
+  .envelope-wrap.opened{
+    opacity:0;
+    pointer-events:none;
+    transform:scale(.9);
+  }
+
+  .envelope{
+    position:absolute;
+    inset:0;
+    background:var(--cream-deep);
+    border:1px solid var(--gold);
+    box-shadow:0 18px 40px rgba(62,39,18,0.25), inset 0 0 0 6px rgba(247,236,214,0.5);
+  }
+
+  .env-shading{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 40%),
+      linear-gradient(315deg, rgba(62,39,18,0.12) 0%, transparent 45%);
+    pointer-events:none;
+  }
+
+  .flap{
+    position:absolute;
+    top:0; left:0; right:0;
+    height:62%;
+    background:linear-gradient(160deg, #ecdcb8, #dcc496);
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    transform-origin:top center;
+    transition:transform .9s cubic-bezier(.6,-0.2,.3,1.3);
+    box-shadow:inset 0 -2px 6px rgba(62,39,18,0.15);
+    z-index:5;
+    border-bottom:1px solid rgba(139,109,63,0.3);
+  }
+  .envelope-wrap.opened .flap{
+    transform:rotateX(178deg);
+  }
+
+  .seal{
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-38%);
+    width:64px; height:64px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #a8432d, var(--wax) 55%, var(--wax-dark) 100%);
+    box-shadow:0 4px 10px rgba(0,0,0,0.35), inset 0 -3px 6px rgba(0,0,0,0.3), inset 0 3px 4px rgba(255,255,255,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:6;
+    transition:transform .5s ease, opacity .4s ease;
+  }
+  .seal svg{width:30px;height:30px;opacity:.85;}
+  .envelope-wrap.opened .seal{
+    transform:translate(-50%,-38%) scale(0);
+    opacity:0;
+  }
+
+  .env-front-text{
+    position:absolute;
+    bottom:14%;
+    left:0; right:0;
+    text-align:center;
+    z-index:3;
+  }
+  .env-front-text .title{
+    font-family:'Playfair Display', serif;
+    font-style:italic;
+    font-weight:700;
+    color:var(--brown-deep);
+    font-size:clamp(22px,5.5vw,32px);
+    letter-spacing:.5px;
+    margin:0;
+  }
+  .env-front-text .to{
+    font-family:'Taviraj', serif;
+    color:var(--ink-soft);
+    font-size:15px;
+    margin-top:6px;
+    letter-spacing:1px;
+  }
+
+  .stamp{
+    position:absolute;
+    top:14px; right:16px;
+    width:46px; height:56px;
+    background:var(--paper);
+    border:2px dashed var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--wax);
+    font-size:20px;
+    z-index:4;
+    transform:rotate(6deg);
+    box-shadow:0 2px 5px rgba(62,39,18,0.2);
+  }
+
+  .postmark{
+    position:absolute;
+    top:20px; left:20px;
+    width:70px; height:70px;
+    border:1.5px solid rgba(107,68,35,0.4);
+    border-radius:50%;
+    z-index:4;
+    opacity:.5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transform:rotate(-8deg);
+  }
+  .postmark::before{
+    content:'';
+    position:absolute; inset:6px;
+    border:1.5px solid rgba(107,68,35,0.4);
+    border-radius:50%;
+  }
+  .postmark span{
+    font-family:'Taviraj', serif;
+    font-size:9px;
+    color:var(--ink-soft);
+    letter-spacing:1px;
+  }
+
+  .hint{
+    position:absolute;
+    bottom:-42px;
+    left:0; right:0;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:15px;
+    letter-spacing:.5px;
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:.55; transform:translateY(0);}
+    50%{opacity:1; transform:translateY(-3px);}
+  }
+
+  /* ---------- LETTER ---------- */
+  .letter-wrap{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:28px 18px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .7s ease;
+    z-index:10;
+  }
+  .letter-wrap.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .letter{
+    position:relative;
+    max-width:540px;
+    width:100%;
+    max-height:88vh;
+    overflow-y:auto;
+    background:var(--paper);
+    padding:44px 36px 40px;
+    box-shadow:0 25px 60px rgba(62,39,18,0.35), 0 0 0 1px rgba(184,147,90,0.4);
+    transform:translateY(40px) scale(.94);
+    opacity:0;
+    transition:transform .8s cubic-bezier(.2,.9,.3,1.1), opacity .7s ease;
+  }
+  .letter-wrap.show .letter{
+    transform:translateY(0) scale(1);
+    opacity:1;
+  }
+
+  .letter::before{
+    content:'';
+    position:absolute; inset:10px;
+    border:1px solid var(--gold);
+    pointer-events:none;
+    opacity:.5;
+  }
+
+  .letter-header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .letter-header .cake{
+    font-size:30px;
+    display:block;
+    margin-bottom:6px;
+  }
+  .letter-header h1{
+    font-family:'Taviraj', serif;
+    font-weight:500;
+    color:var(--brown-deep);
+    font-size:24px;
+    margin:0;
+    letter-spacing:.5px;
+  }
+  .divider{
+    width:80px;
+    height:1px;
+    background:var(--gold);
+    margin:14px auto;
+    position:relative;
+  }
+  .divider::before{
+    content:'✦';
+    position:absolute;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    background:var(--paper);
+    color:var(--gold);
+    padding:0 8px;
+    font-size:13px;
+  }
+
+  .photos{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin:0 0 30px;
+    flex-wrap:wrap;
+  }
+  .polaroid{
+    background:#fffdf8;
+    padding:10px 10px 26px;
+    box-shadow:0 10px 22px rgba(62,39,18,0.25);
+    width:140px;
+    opacity:0;
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .polaroid img{
+    display:block;
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    filter:sepia(.15) contrast(1.02);
+  }
+  .polaroid.p1{ transform:translateY(24px) rotate(-7deg); }
+  .polaroid.p2{ transform:translateY(24px) rotate(6deg); margin-top:14px; }
+  .letter-wrap.show .polaroid{
+    opacity:1;
+  }
+  .letter-wrap.show .polaroid.p1{
+    transform:translateY(0) rotate(-6deg);
+    transition-delay:.35s;
+  }
+  .letter-wrap.show .polaroid.p2{
+    transform:translateY(0) rotate(5deg);
+    transition-delay:.55s;
+  }
+
+  .letter-body p{
+    font-family:'Mali', sans-serif;
+    font-size:16.5px;
+    line-height:1.95;
+    color:var(--ink);
+    margin:0 0 16px;
+    text-align:left;
+  }
+  .letter-body p:first-of-type::first-letter{
+    font-family:'Playfair Display', serif;
+    font-size:38px;
+    font-weight:700;
+    color:var(--wax);
+    float:left;
+    line-height:.8;
+    padding:6px 8px 0 0;
+  }
+
+  .signature{
+    margin-top:24px;
+    text-align:right;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:20px;
+    color:var(--ink-soft);
+  }
+
+  .music-btn{
+    position:absolute;
+    top:14px; right:14px;
+    width:38px; height:38px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    background:var(--cream);
+    color:var(--ink-soft);
+    font-size:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .2s ease;
+  }
+  .music-btn:active{ transform:scale(.9); }
+
+  .close-btn{
+    display:block;
+    margin:26px auto 0;
+    background:none;
+    border:1px solid var(--gold);
+    color:var(--ink-soft);
+    font-family:'Taviraj', serif;
+    font-size:14px;
+    padding:9px 22px;
+    cursor:pointer;
+    letter-spacing:1px;
+    transition:background .25s ease, color .25s ease;
+  }
+  .close-btn:hover{
+    background:var(--wax);
+    color:var(--cream);
+    border-color:var(--wax);
+  }
+
+  canvas#confetti{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:20;
+  }
+
+  @media (max-width:420px){
+    .letter{ padding:34px 22px 30px; }
+    .letter-body p{ font-size:15.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="envelope-wrap" id="envelopeWrap">
+    <div class="envelope">
+      <div class="env-shading"></div>
+      <div class="postmark"><span>BKK · TH</span></div>
+      <div class="stamp">❤</div>
+      <div class="flap"></div>
+      <div class="seal">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21s-7.5-4.8-10-9.6C.4 7.7 2.6 4 6.3 4c2 0 3.6 1.1 4.7 2.8C12.1 5.1 13.7 4 15.7 4 19.4 4 21.6 7.7 20 11.4 18.5 16.2 12 21 12 21z" fill="#f4e8d0"/>
+        </svg>
+      </div>
+      <div class="env-front-text">
+        <p class="title">Happy Birthday!! Papa</p>
+        <p class="to">แด่ ป๊า ผู้เป็นที่รัก</p>
+      </div>
+    </div>
+    <div class="hint">💌 คลิกเพื่อเปิดการ์ด</div>
+  </div>
+</div>
+
+<div class="letter-wrap" id="letterWrap">
+  <div class="letter" id="letterPaper">
+    <button class="music-btn" id="musicBtn" aria-label="เปิด/ปิดเพลง">♪</button>
+    <div class="letter-header">
+      <span class="cake">🎂🎉</span>
+      <h1>สุขสันต์วันเกิดนะคะ</h1>
+      <div class="divider"></div>
+    </div>
+    <div class="photos">
+      <div class="polaroid p1"><img src="photo1.jpg" alt="ความทรงจำกับป๊า 1"></div>
+      <div class="polaroid p2"><img src="photo2.jpg" alt="ความทรงจำกับป๊า 2"></div>
+    </div>
+    <div class="letter-body">
+      <p>ปีนี้อีฟอยากอวยพรให้ป๊ามีสุขภาพแข็งแรง มีความสุขในทุกๆวัน มีแต่ความสบายใจ ขอให้มีแต่เรื่องดีๆเข้ามานะคะ</p>
+      <p>อีฟขอให้ป๊าดูแลตัวเองเยอะๆ กินข้าวให้ตรงเวลา อย่านอนดึก อย่าสูบบุรี่เยอะ แล้วก็อย่าลืมหาเวลาทำในสิ่งที่ป๊ามีความสุขนะคะ อีฟเป็นกำลังให้ป๊าเสมอ จะพยายามกลับไปหาบ่อยๆนะคะ</p>
+      <p>สุขสันต์วันเกิดนะป๊า</p>
+      <p>รักป๊ามากๆๆๆที่สุดด 🤍</p>
+    </div>
+    <div class="signature">— อีฟ</div>
+    <button class="close-btn" id="closeBtn">ปิดการ์ด</button>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<audio id="bgm" src="music.mp3" loop preload="none"></audio>
+
+<script>
+  const envelopeWrap = document.getElementById('envelopeWrap');
+  const letterWrap = document.getElementById('letterWrap');
+  const closeBtn = document.getElementById('closeBtn');
+  const musicBtn = document.getElementById('musicBtn');
+  const bgm = document.getElementById('bgm');
+  let opened = false;
+  let musicOn = false;
+
+  function openCard(){
+    if(opened) return;
+    opened = true;
+    envelopeWrap.classList.add('opened');
+    setTimeout(()=>{
+      letterWrap.classList.add('show');
+      burstConfetti();
+    }, 550);
+    bgm.volume = 0.5;
+    bgm.play().then(()=>{ musicOn = true; updateMusicIcon(); }).catch(()=>{ musicOn = false; updateMusicIcon(); });
+  }
+
+  envelopeWrap.addEventListener('click', openCard);
+
+  closeBtn.addEventListener('click', ()=>{
+    letterWrap.classList.remove('show');
+  });
+
+  function updateMusicIcon(){
+    musicBtn.textContent = musicOn ? '♪' : '✕';
+    musicBtn.style.opacity = musicOn ? '1' : '.55';
+  }
+
+  musicBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    if(musicOn){
+      bgm.pause();
+      musicOn = false;
+    } else {
+      bgm.play().catch(()=>{});
+      musicOn = true;
+    }
+    updateMusicIcon();
+  });
+
+  /* confetti */
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const colors = ['#b8935a','#8a3324','#f4e8d0','#6b4423','#d8c093','#a8432d'];
+  let particles = [];
+
+  function burstConfetti(){
+    particles = [];
+    const count = 140;
+    for(let i=0;i<count;i++){
+      particles.push({
+        x: canvas.width/2 + (Math.random()-0.5)*120,
+        y: canvas.height*0.28,
+        vx: (Math.random()-0.5)*9,
+        vy: Math.random()*-9 - 4,
+        size: Math.random()*7+4,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        rot: Math.random()*360,
+        vr: (Math.random()-0.5)*12,
+        shape: Math.random()>0.5 ? 'rect' : 'circle',
+        gravity: 0.22 + Math.random()*0.08,
+        life: 0
+      });
+    }
+    requestAnimationFrame(animateConfetti);
+  }
+
+  function animateConfetti(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    particles.forEach(p=>{
+      p.life++;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= 0.99;
+      p.rot += p.vr;
+      if(p.y < canvas.height + 20 && p.life < 260){
+        alive = true;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - p.life/260);
+        if(p.shape === 'rect'){
+          ctx.fillRect(-p.size/2, -p.size/3, p.size, p.size*0.6);
+        } else {
+          ctx.beginPath();
+          ctx.arc(0,0,p.size/2,0,Math.PI*2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    });
+    if(alive){
+      requestAnimationFrame(animateConfetti);
+    } else {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+    }
+  }
+</script>
+
+</body>
+</html>
